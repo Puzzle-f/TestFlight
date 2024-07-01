@@ -20,8 +20,8 @@ class FilterInstance extends FilterBase implements FilterFly {
     public FilterInstance getArrivalBeforeDeparture() {
         return new FilterInstance(flightsInstance.stream().filter(flight -> {
             List<Segment> segments = flight.getSegments();
-            for (int i = 0; i < segments.size(); i++) {
-                if (segments.get(i).getArrivalDate().isBefore(segments.get(i).getDepartureDate())) {
+            for (Segment segment : segments) {
+                if (segment.getArrivalDate().isBefore(segment.getDepartureDate())) {
                     return false;
                 }
             }
@@ -34,8 +34,8 @@ class FilterInstance extends FilterBase implements FilterFly {
         LocalDateTime currentData = LocalDateTime.now();
         return new FilterInstance(flightsInstance.stream().filter(flight -> {
             List<Segment> segments = flight.getSegments();
-            for (int i = 0; i < segments.size(); i++) {
-                if (segments.get(i).getDepartureDate().isBefore(currentData)) {
+            for (Segment segment : segments) {
+                if (segment.getDepartureDate().isBefore(currentData)) {
                     return false;
                 }
             }
@@ -55,8 +55,7 @@ class FilterInstance extends FilterBase implements FilterFly {
                     countTimeMin += (int) Duration.between(startPeriod, endPeriod).toMinutes();
                 }
             }
-            if (countTimeMin / 60 > limitTimeHours) return false;
-            else return true;
+            return countTimeMin / 60 <= limitTimeHours;
         }).collect(Collectors.toList()));
     }
 }
